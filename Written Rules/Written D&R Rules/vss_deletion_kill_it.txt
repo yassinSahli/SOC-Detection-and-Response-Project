@@ -1,0 +1,30 @@
+Detect
+event: NEW_PROCESS
+op: and
+rules:
+  - op: is
+    path: event/FILE_PATH
+    value: C:\Windows\system32\vssadmin.exe
+  - op: contains
+    path: event/COMMAND_LINE
+    value: delete
+  - op: contains
+    path: event/COMMAND_LINE
+    value: shadows
+  - op: contains
+    path: event/COMMAND_LINE
+    value: /all
+  - op: is
+    path: routing/hostname
+    value: windev2404eval.localdomain
+
+Respond
+- action: report
+  name: vss_deletion_kill_it
+- action: task
+  command:
+    - deny_tree
+    - <<routing/parent>>
+
+Comment
+Detects the Shadow Copies Deletion Using OS Utilities.

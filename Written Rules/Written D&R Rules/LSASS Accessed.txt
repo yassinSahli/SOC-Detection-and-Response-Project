@@ -1,0 +1,18 @@
+Detect
+event: SENSITIVE_PROCESS_ACCESS
+op: ends with
+path: event/*/TARGET/FILE_PATH
+value: lsass.exe
+
+
+Respond
+- action: report
+  metadata:
+    author: YassineS (yassine.sahli@tek-up.de)
+  name: LSASS access
+  priority: 3
+
+
+
+Comment
+We’re specifying that this detection should only look at 'SENSITIVE_PROCESS_ACCESS' events where the victim or target process ends with lsass.exe. LimaCharlie will generate a detection “report” anytime this detection occurs.

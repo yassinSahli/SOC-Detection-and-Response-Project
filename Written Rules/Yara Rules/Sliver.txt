@@ -1,0 +1,41 @@
+rule sliver_github_file_paths_function_names {
+  meta:
+    author = "NCSC UK"
+    description = "Detects Sliver Windows and Linux implants based on paths and function names within the binary"
+  strings:
+    $p1 = "/sliver/"
+    $p2 = "sliverpb."
+    $fn1 = "RevToSelfReq"
+    $fn2 = "ScreenshotReq"
+    $fn3 = "IfconfigReq"
+    $fn4 = "SideloadReq"
+    $fn5 = "InvokeMigrateReq"
+    $fn6 = "KillSessionReq"
+    $fn7 = "ImpersonateReq"
+    $fn8 = "NamedPipesReq"
+  condition:
+    (uint32(0) == 0x464C457F or (uint16(0) == 0x5A4D and uint16(uint32(0x3c)) == 0x4550)) and (all of ($p*) or 3 of ($fn*))
+}
+
+
+
+rule sliver_proxy_isNotFound_retn_cmp_uniq {
+  meta:
+    author = "NCSC UK"
+    description = "Detects Sliver implant framework based on some unique CMPs within the Proxy isNotFound function. False positives may occur"
+  strings:
+    $ = {C644241800C381F9B3B5E9B2}
+    $ = {8B481081F90CAED682}
+  condition:
+    (uint32(0) == 0x464C457F or (uint16(0) == 0x5A4D and uint16(uint32(0x3c)) == 0x4550)) and all of them
+}
+
+rule sliver_nextCCServer_calcs {
+  meta:
+    author = "NCSC UK"
+    description = "Detects Sliver implant framework based on instructions from the nextCCServer function. False positives may occur"
+  strings:
+    $ = {4889D3489948F7F94839CA????48C1E204488B0413488B4C1308}
+  condition:
+    (uint32(0) == 0x464C457F or (uint16(0) == 0x5A4D and uint16(uint32(0x3c)) == 0x4550)) and all of them
+}

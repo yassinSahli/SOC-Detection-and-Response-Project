@@ -1,0 +1,10 @@
+rule sliver_strings {
+  meta:
+    author = "Eric Capuano, inspired by NCSC UK"
+    description = "Detects Sliver Windows and Linux implants based on obvious strings within - not tested at scale, but it's probably good :)"
+  strings:
+    $p1 = "/sliver/"
+    $p2 = "sliverpb"
+  condition:
+    all of ($p*)
+}

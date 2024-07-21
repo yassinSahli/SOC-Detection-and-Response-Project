@@ -1,0 +1,18 @@
+Detect
+event: YARA_DETECTION
+op: and
+rules:
+  - op: exists
+    path: event/RULE_NAME
+  - op: exists
+    path: event/PROCESS/*
+
+Respond
+- action: report
+  name: YARA Detection in Memory {{ .event.RULE_NAME }}
+- action: add tag
+  tag: yara_detection_memory
+  ttl: 80000
+
+Comment
+Setup a 1st generic D&R rules that will generate alerts whenever a YARA detection occurs.

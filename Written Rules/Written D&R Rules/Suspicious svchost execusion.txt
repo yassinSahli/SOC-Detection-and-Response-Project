@@ -1,0 +1,13 @@
+Detect
+event: NEW_PROCESS
+op: ends with
+path: event/FILE_PATH
+value: \svchost.exe
+
+Respond
+- action: report
+  name: Suspicious svchost execusion
+
+Comment
+This rule is designed to alert when svchost.exe are executed. 
+[!] A lot of False Postivies, needs tunning [!]

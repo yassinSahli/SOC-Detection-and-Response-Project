@@ -1,0 +1,16 @@
+Detect
+op: and
+rules:
+  - op: is
+    path: cat
+    value: Suspicious svchost execusion
+  - op: is
+    path: detect/event/FILE_PATH
+    value: C:\Windows\system32\svchost.exe
+  - op: contains
+    path: detect/event/COMMAND_LINE
+    value: '-k'
+
+
+Comment
+This rule aims to reduce false positives over time. It does this by checking if the svchost.exe command contains the "-k" flag (indicating normal usage). If it does, no alerts will be generated.

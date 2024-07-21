@@ -1,0 +1,27 @@
+Detect
+event: NEW_PROCESS
+op: and
+rules:
+  - op: starts with
+    path: event/FILE_PATH
+    value: C:\Users\
+  - op: contains
+    path: event/FILE_PATH
+    value: \Downloads\
+
+Respond
+- action: report
+  name: Execution from Downloads directory
+- action: task
+  command: yara_scan hive://yara/sliver-process --pid "{{ .event.PROCESS_ID }}"
+  investigation: Yara Scan Process
+  suppression:
+    is_global: false
+    keys:
+      - '{{ .event.PROCESS_ID }}'
+      - Yara Scan Process
+    max_count: 1
+    period: 1m
+
+Comment
+Automatically Launch a YARA Scan on processes launched from Downloads directory.
